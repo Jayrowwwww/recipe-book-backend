@@ -13,9 +13,10 @@ export const users = pgTable("user", {
 });
 
 export const recipes = pgTable("recipe", {
-  id: uuid().defaultRandom().primaryKey(), name: text().notNull(), cuisine: text().notNull(),
+  id: uuid().defaultRandom().primaryKey(), name: text().notNull(), description: text(), cuisine: text().notNull(),
   mealType: text().array().notNull(), difficulty: text().notNull(), cookTimeMinutes: integer().notNull(),
   tags: text().array().notNull(), image: text().notNull(), ingredients: text().array().notNull(), instructions: text().array().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
   userId: uuid().notNull().references(() => users.id, { onDelete: "cascade" }),
 }, (table) => [index("recipe_owner_idx").on(table.userId)]);
 

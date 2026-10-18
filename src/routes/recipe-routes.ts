@@ -13,6 +13,11 @@ const schemaMiddleware = new SchemaMiddleware();
 const recipeController = new RecipeController();
 const roleValidatorMiddleware = new RoleValidatorMiddleware();
 
+// PUBLIC: guests may browse the catalogue without logging in.
+// The repository excludes owner identifiers from these responses.
+router.get("/v1/public-recipes", recipeController.getPublicRecipes);
+router.get("/v1/public-recipe/:id", schemaMiddleware.validate(recipeIdSchema), recipeController.getPublicRecipe);
+
 // ADMIN: view all users' recipes.
 router.get("/v1/get-all-recipes", authMiddleware.execute, roleValidatorMiddleware.validate("ADMIN"), recipeController.getAllRecipes);
 

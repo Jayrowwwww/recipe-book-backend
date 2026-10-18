@@ -1,11 +1,22 @@
 import type { Request, Response } from "express";
 import type { AuthenticatedRequest } from "@/middlewares/auth-middleware";
-import { getRecipesService, getAllRecipesService, getRecipeService, createRecipeService, updateRecipeService, deleteRecipeService } from "@/services/recipes";
+import { getRecipesService, getAllRecipesService, getPublicRecipesService, getPublicRecipeService, getRecipeService, createRecipeService, updateRecipeService, deleteRecipeService } from "@/services/recipes";
 import { createRecipeSchema, updateRecipeSchema } from "@/schema/recipe-schema";
 
 export class RecipeController {
   public getAllRecipes = async (_req: Request, res: Response) => {
     const result = await getAllRecipesService();
+    return res.status(result.code).json(result);
+  };
+
+  // Public routes: no authentication, so guests can browse the catalogue.
+  public getPublicRecipes = async (_req: Request, res: Response) => {
+    const result = await getPublicRecipesService();
+    return res.status(result.code).json(result);
+  };
+
+  public getPublicRecipe = async (req: Request, res: Response) => {
+    const result = await getPublicRecipeService(req.params.id as string);
     return res.status(result.code).json(result);
   };
 

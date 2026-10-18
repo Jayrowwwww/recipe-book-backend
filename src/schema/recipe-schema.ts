@@ -4,6 +4,7 @@ const text = z.string().trim().min(1);
 
 const recipeBody = z.object({
   name: text,
+  description: z.string().trim().max(500).optional(),
   cuisine: text,
   mealType: z.array(text).min(1),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
